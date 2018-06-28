@@ -3,7 +3,6 @@ import os
 import sys
 import time
 
-import numpy as np
 from PyQt5 import QtCore, uic
 from PyQt5.QtGui import QIcon, QDoubleValidator, QRegExpValidator
 from PyQt5.QtTest import QTest
@@ -20,41 +19,15 @@ from const import PRECISION, DECIMALS_COUNT, LEMKE_TITLE, START_TITLE,\
     DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT, SHOW_TIME
 from data import VARIANTS
 from lemke_algorithm import calc_game_winnings
+from lib_file import is_close, transpose, str_to_float
 
 
 DOUBLE_VALIDATOR = QDoubleValidator(decimals=DECIMALS_COUNT)
 RUSSIAN_LETTERS_VALIDATOR = QRegExpValidator(QtCore.QRegExp('[А-я]+'))
 
 
-def is_close(a, b, tolerance=PRECISION):
-    """Проверить два числа на приблизительное равенство"""
-    return round(abs(a-b), DECIMALS_COUNT) <= tolerance
-
-
-def transpose(mat):
-    """Транспонировать матрицу
-
-    :param mat: Матрица
-    :type mat: list of list
-    """
-    return np.array(mat).transpose().tolist()
-
-
-def str_to_float(string):
-    """Проеобразовать str к float с заменой ',' -> '.'
-
-    :param string: Строка для преобразования (содержащая цифры и разделитель)
-    :type string: str
-    :return: Число с плавающей точкой или None для пустой строки
-    :rtype: float or None
-    """
-    if not string:
-        return None
-    return float(string.replace(',', '.'))
-
-
-# Делегат для установки валидатора на поля таблиц
 class TableDelegate(QItemDelegate):
+    """Делегат для установки валидатора на поля таблиц"""
     def createEditor(self, parent, option, index):
         editor = QLineEdit(parent)
         editor.setValidator(DOUBLE_VALIDATOR)
