@@ -1,0 +1,39 @@
+QPushButton {
+    color: black;
+    background-color: white;
+    border-width: 1px;
+    border-color: rgb(118, 121, 124);
+    border-style: solid;
+    padding: 5px;
+    border-radius: 3px;
+    outline: none;
+    font-family: Tahoma;
+}
+QPushButton:pressed {
+    background-color: rgb(211, 211, 211);
+    padding-top: -15px;
+    padding-bottom: -17px;
+}
+QPushButton:hover {
+    border: 1px solid rgb(0, 93, 142);
+}
+
+QComboBox {
+    selection-background-color: white;
+    background-color: white;
+    selection-color: black;
+    border-style: solid;
+    border: 1px solid rgb(118, 121, 124);
+    padding: 5px;
+    font-family: Tahoma;
+}
+
+QLabel {
+    background-color: transparent;
+    font-family: Tahoma;
+}
+
+QMessageBox {
+    background-color: white;
+    font-family: Tahoma;
+}

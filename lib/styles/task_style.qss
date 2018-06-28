@@ -1,0 +1,8 @@
+QPushButton {
+    background-color: transparent;
+    border-color: transparent;
+}
+QPushButton:pressed {
+    padding-top: -15px;
+    padding-bottom: -17px;
+}
