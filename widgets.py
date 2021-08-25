@@ -295,8 +295,10 @@ class MainWidget(QWidget):
         if not self.tmp_table:
             return
 
-        if not (self.tmp_table.rowCount() == table.rowCount() and
-                self.tmp_table.columnCount() == table.columnCount()):
+        if (
+            self.tmp_table.rowCount() != table.rowCount()
+            or self.tmp_table.columnCount() != table.columnCount()
+        ):
             QMessageBox.information(
                 self, PASTE_ERROR_TITLE, PASTE_ERROR_MSG, QMessageBox.Ok
             )
@@ -774,8 +776,7 @@ class SecondStepWindowOne(MainWidget):
         MainWidget.coop_winnings_user['12vs3'] = dict(
             v12=v12_user, v3=v3_user, vN=vN_user,
         )
-        MainWidget.coop_winnings_user['12vs3']['is_essential'] = \
-            True if is_essential == YES else False
+        MainWidget.coop_winnings_user['12vs3']['is_essential'] = is_essential == YES
 
         return True
 
@@ -916,8 +917,7 @@ class SecondStepWindowTwo(MainWidget):
         MainWidget.coop_winnings_user['13vs2'] = dict(
             v13=v13_user, v2=v2_user, vN=vN_user,
         )
-        MainWidget.coop_winnings_user['13vs2']['is_essential'] = \
-            True if is_essential == YES else False
+        MainWidget.coop_winnings_user['13vs2']['is_essential'] = is_essential == YES
 
         return True
 
@@ -1063,8 +1063,7 @@ class SecondStepWindowThree(MainWidget):
         MainWidget.coop_winnings_user['1vs23'] = dict(
             v1=v1_user, v23=v23_user, vN=vN_user,
         )
-        MainWidget.coop_winnings_user['1vs23']['is_essential'] = \
-            True if is_essential == YES else False
+        MainWidget.coop_winnings_user['1vs23']['is_essential'] = is_essential == YES
 
         return True
 
@@ -1284,10 +1283,7 @@ class FourthStepWindow(MainWidget):
         else:
             is_rational = NO
 
-        if is_rational != is_rational_user:
-            return False
-
-        return True
+        return is_rational == is_rational_user
 
     def check_solution(self, mu1_user, mu2_user, mu3_user, is_rational_user):
         """Проверить расчитанный дележ с учетом индивидуальных выигрышей

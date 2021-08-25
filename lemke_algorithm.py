@@ -18,15 +18,16 @@ def is_equilibrium(xi, yi, mat_a, mat_b, mat_e, mat_f, m, n):
     :param m: Размер игры (кол-во строк)
     :param n: Размер игры (кол-во столбцов)
     """
-    for j in range(0, n):
+    for j in range(n):
         if not is_close(np.matmul(mat_e[:, j], yi)*(np.matmul(mat_b[:, j], xi) - 1), 0):  # NoQA
             return False
 
-    for i in range(0, m):
-        if not is_close(np.matmul(mat_f[:, i], xi)*(np.matmul(mat_a[:, i], yi) - 1), 0):  # NoQA
-            return False
-
-    return True
+    return all(
+        is_close(
+            np.matmul(mat_f[:, i], xi) * (np.matmul(mat_a[:, i], yi) - 1), 0
+        )
+        for i in range(m)
+    )
 
 
 def simplex_method(mat, pivot, pivot_row, pivot_col):
@@ -43,7 +44,7 @@ def simplex_method(mat, pivot, pivot_row, pivot_col):
 
     # Из остальных строк вычитается строка с разрешающим элементом,
     # умноженная на коэффициент
-    for i in range(0, mat.shape[0]):
+    for i in range(mat.shape[0]):
         if i != pivot_row:
             coef = mat[i][pivot_col]
             mat[i] -= np.multiply(mat[pivot_row], coef)
@@ -57,9 +58,7 @@ def calculate_epsilon_row(mat, v0):
     :param mat: Матрица для расчета (транспонированная A1 или B1)
     :param v0: Вектор начального решения (x0 или y0)
     """
-    return np.array([
-        np.matmul(mat[:, i], v0) - 1 for i in range(0, mat.shape[1])
-    ])
+    return np.array([np.matmul(mat[:, i], v0) - 1 for i in range(mat.shape[1])])
 
 
 def calculate_lambda_column(mat, epsilons):
@@ -73,11 +72,11 @@ def calculate_lambda_column(mat, epsilons):
     cols = mat.shape[1]
     lambdas = np.array([])
 
-    for i in range(0, rows):
+    for i in range(rows):
         lambdas1, lambdas2 = np.array([]), np.array([])
         row = mat[i]
 
-        for j in range(0, cols):
+        for j in range(cols):
             element = row[j]
             # Две формулы рассчета для положительных и отрицательных элементов
             if element < 0:
@@ -105,9 +104,7 @@ def get_possible_solutions(v0, lambdas, basis):
     :param lambdas: Столбец лямбд для матрицы
     :param basis: Базисная часть матрицы после замены базиса
     """
-    return np.array([
-        v0 + lambdas[i]*basis[i] for i in range(0, basis.shape[0])
-    ])
+    return np.array([v0 + lambdas[i]*basis[i] for i in range(basis.shape[0])])
 
 
 def calculate_answer(d, x, y):
@@ -184,8 +181,8 @@ def get_equilibrium_strategies(a1, b1, a_pivot_row, m, n):
     x_solutions = get_possible_solutions(x0, b_lambdas, new_f)
 
     # Поиск равновесного решения
-    for i in range(0, x_solutions.shape[0]):
-        for j in range(0, y_solutions.shape[0]):
+    for i in range(x_solutions.shape[0]):
+        for j in range(y_solutions.shape[0]):
 
             if is_equilibrium(x_solutions[i], y_solutions[j],
                               a1_transposed, b1, e, f, m, n):
@@ -217,7 +214,7 @@ def calc_game_winnings(a, b):
     a1 = d_matrix - a
     b1 = d_matrix - b
 
-    for k in range(0, n):
+    for k in range(n):
         equilibrium_strategies = get_equilibrium_strategies(a1, b1, k, m, n)
 
         if equilibrium_strategies:
